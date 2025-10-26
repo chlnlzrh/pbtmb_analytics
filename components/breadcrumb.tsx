@@ -102,7 +102,7 @@ export function Breadcrumb({ className }: BreadcrumbProps) {
   }
 
   return (
-    <nav className={cn("flex items-center space-x-1 text-baseline text-muted-foreground", className)} aria-label="Breadcrumb">
+    <nav className={cn("flex items-center space-x-1 text-xs font-normal text-gray-500 dark:text-gray-400", className)} aria-label="Breadcrumb">
       <ol className="flex items-center space-x-1">
         {breadcrumbs.map((item, index) => (
           <li key={item.href} className="flex items-center">
@@ -111,7 +111,7 @@ export function Breadcrumb({ className }: BreadcrumbProps) {
             )}
             {item.isActive ? (
               <span 
-                className="text-baseline text-foreground"
+                className="text-xs font-normal text-gray-900 dark:text-white"
                 aria-current="page"
               >
                 {item.title}
@@ -119,7 +119,7 @@ export function Breadcrumb({ className }: BreadcrumbProps) {
             ) : (
               <Link
                 href={item.href as any}
-                className="text-baseline text-muted-foreground hover:text-foreground transition-colors duration-200"
+                className="text-xs font-normal text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
               >
                 {index === 0 && item.href === "/" ? (
                   <span className="flex items-center">

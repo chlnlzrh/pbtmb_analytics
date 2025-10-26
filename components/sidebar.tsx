@@ -190,7 +190,7 @@ function SidebarContent({ onItemClick }: SidebarContentProps) {
               onOpenChange={() => toggleSection(item.title)}
             >
               <CollapsibleTrigger 
-                className="flex w-full items-center justify-between py-1 px-3 text-baseline text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm"
+                className="flex w-full items-center justify-between py-2 px-3 text-xs font-normal text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md"
                 aria-expanded={isExpanded}
                 aria-controls={`submenu-${item.title.replace(/\s+/g, '-').toLowerCase()}`}
               >
@@ -215,10 +215,10 @@ function SidebarContent({ onItemClick }: SidebarContentProps) {
                     href={subItem.href as any}
                     onClick={onItemClick}
                     className={cn(
-                      "block py-1 px-3 text-baseline transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm",
+                      "block py-2 px-3 ml-6 text-xs font-normal transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md",
                       isActive(subItem.href)
-                        ? "text-black dark:text-white"
-                        : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                        ? "text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
                     )}
                     aria-current={isActive(subItem.href) ? "page" : undefined}
                   >
@@ -236,10 +236,10 @@ function SidebarContent({ onItemClick }: SidebarContentProps) {
             href={item.href as any}
             onClick={onItemClick}
             className={cn(
-              "flex items-center space-x-2 py-1 px-3 text-baseline transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm",
+              "flex items-center space-x-2 py-2 px-3 text-xs font-normal transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-md",
               isItemActive
-                ? "text-black dark:text-white"
-                : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                ? "text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
             )}
             aria-current={isItemActive ? "page" : undefined}
           >
@@ -257,22 +257,22 @@ export function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <div className="flex flex-col flex-grow pt-5 bg-background border-r overflow-hidden">
-          <div className="flex items-center flex-shrink-0 px-4">
-            <h1 className="text-baseline">PetPooja Analytics</h1>
+        <div className="flex flex-col flex-grow pt-5 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="flex items-center flex-shrink-0 px-4 mb-4">
+            <h1 className="text-xs font-normal text-gray-900 dark:text-white">PetPooja Analytics</h1>
           </div>
-          <div className="mt-3 px-4">
+          <div className="px-4 mb-3">
             <MenuSearch />
           </div>
-          <div className="mt-3 px-4">
+          <div className="px-4 mb-3">
             <Breadcrumb />
           </div>
-          <div className="mt-5 flex-grow flex flex-col overflow-hidden">
-            <ScrollArea className="flex-1 px-2 space-y-1">
-              <nav className="space-y-1">
+          <div className="flex-grow flex flex-col overflow-hidden">
+            <div className="flex-1 px-2 overflow-y-auto">
+              <nav className="space-y-1 py-2">
                 <SidebarContent />
               </nav>
-            </ScrollArea>
+            </div>
           </div>
         </div>
       </div>
@@ -286,30 +286,30 @@ export function Sidebar() {
               <span className="sr-only">Open menu</span>
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-0">
+          <SheetContent side="left" className="w-64 p-0 bg-white dark:bg-gray-900">
             <div className="flex flex-col h-full">
               <div className="flex items-center flex-shrink-0 px-4 py-5">
-                <h1 className="text-baseline">PetPooja Analytics</h1>
+                <h1 className="text-xs font-normal text-gray-900 dark:text-white">PetPooja Analytics</h1>
               </div>
-              <div className="mt-3 px-4">
+              <div className="px-4 mb-3">
                 <MenuSearch onItemSelect={() => {
                   const closeButton = document.querySelector('[data-state="open"] button[aria-label="Close"]') as HTMLButtonElement
                   closeButton?.click()
                 }} />
               </div>
-              <div className="mt-3 px-4">
+              <div className="px-4 mb-3">
                 <Breadcrumb />
               </div>
-              <div className="flex-grow overflow-hidden mt-5">
-                <ScrollArea className="h-full px-2">
-                  <nav className="space-y-1">
+              <div className="flex-grow overflow-hidden">
+                <div className="h-full px-2 overflow-y-auto">
+                  <nav className="space-y-1 py-2">
                     <SidebarContent onItemClick={() => {
                       // Close the sheet when an item is clicked
                       const closeButton = document.querySelector('[data-state="open"] button[aria-label="Close"]') as HTMLButtonElement
                       closeButton?.click()
                     }} />
                   </nav>
-                </ScrollArea>
+                </div>
               </div>
             </div>
           </SheetContent>

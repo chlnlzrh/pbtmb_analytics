@@ -113,7 +113,7 @@ export function MenuSearch({ onItemSelect }: MenuSearchProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground px-4 py-2 relative h-8 w-full justify-start rounded-[0.5rem] bg-background text-baseline text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-64"
+        className="inline-flex items-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-2 relative h-8 w-full justify-start rounded-md bg-white dark:bg-gray-900 text-xs font-normal text-gray-500 dark:text-gray-400 shadow-sm"
       >
         <Search className="mr-2 h-4 w-4" />
         <span className="hidden lg:inline-flex">Search menu...</span>
