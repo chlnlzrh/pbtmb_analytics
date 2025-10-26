@@ -76,10 +76,70 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        slideInFromLeft: {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        slideOutToLeft: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-100%)" },
+        },
+        slideInFromTop: {
+          from: { transform: "translateY(-100%)" },
+          to: { transform: "translateY(0)" },
+        },
+        slideOutToTop: {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(-100%)" },
+        },
+        slideInFromRight: {
+          from: { transform: "translateX(100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        slideOutToRight: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(100%)" },
+        },
+        slideInFromBottom: {
+          from: { transform: "translateY(100%)" },
+          to: { transform: "translateY(0)" },
+        },
+        slideOutToBottom: {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(100%)" },
+        },
+        fadeIn: {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        fadeOut: {
+          from: { opacity: "1" },
+          to: { opacity: "0" },
+        },
+        zoomIn: {
+          from: { transform: "scale(0.95)", opacity: "0" },
+          to: { transform: "scale(1)", opacity: "1" },
+        },
+        zoomOut: {
+          from: { transform: "scale(1)", opacity: "1" },
+          to: { transform: "scale(0.95)", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "slide-in-from-left": "slideInFromLeft 0.3s ease-out",
+        "slide-out-to-left": "slideOutToLeft 0.3s ease-out",
+        "slide-in-from-top": "slideInFromTop 0.3s ease-out",
+        "slide-out-to-top": "slideOutToTop 0.3s ease-out",
+        "slide-in-from-right": "slideInFromRight 0.3s ease-out",
+        "slide-out-to-right": "slideOutToRight 0.3s ease-out",
+        "slide-in-from-bottom": "slideInFromBottom 0.3s ease-out",
+        "slide-out-to-bottom": "slideOutToBottom 0.3s ease-out",
+        "fade-in": "fadeIn 0.3s ease-out",
+        "fade-out": "fadeOut 0.3s ease-out",
+        "zoom-in": "zoomIn 0.3s ease-out",
+        "zoom-out": "zoomOut 0.3s ease-out",
       },
     },
   },

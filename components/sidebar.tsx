@@ -19,8 +19,13 @@ import {
   Menu
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useMenuState } from "@/lib/menu-state"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { MenuSkeleton } from "@/components/menu-skeleton"
+import { MenuSearch } from "@/components/menu-search"
+import { Breadcrumb } from "@/components/breadcrumb"
+import { ScrollArea } from "@/components/scroll-area"
 
 interface NavItem {
   title: string
@@ -148,14 +153,17 @@ interface SidebarContentProps {
 
 function SidebarContent({ onItemClick }: SidebarContentProps) {
   const pathname = usePathname()
-  const [expandedSections, setExpandedSections] = React.useState<string[]>([])
+  const { expandedSections, isLoaded, toggleSection, setSelectedItem } = useMenuState()
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null)
 
-  const toggleSection = (title: string) => {
-    setExpandedSections(prev => 
-      prev.includes(title) 
-        ? prev.filter(item => item !== title)
-        : [...prev, title]
-    )
+  // Set selected item when pathname changes
+  React.useEffect(() => {
+    setSelectedItem(pathname)
+  }, [pathname, setSelectedItem])
+
+  // Show skeleton while loading menu state
+  if (!isLoaded) {
+    return <MenuSkeleton />
   }
 
   const isActive = (href: string) => {
@@ -164,7 +172,12 @@ function SidebarContent({ onItemClick }: SidebarContentProps) {
   }
 
   return (
-    <div className="space-y-0.5 py-2">
+    <div 
+      ref={scrollContainerRef}
+      className="space-y-0.5 py-2 overflow-y-auto"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       {navItems.map((item) => {
         const isItemActive = isActive(item.href)
         const isExpanded = expandedSections.includes(item.title)
@@ -176,28 +189,38 @@ function SidebarContent({ onItemClick }: SidebarContentProps) {
               open={isExpanded}
               onOpenChange={() => toggleSection(item.title)}
             >
-              <CollapsibleTrigger className="flex w-full items-center justify-between py-1 px-3 text-baseline text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-300">
+              <CollapsibleTrigger 
+                className="flex w-full items-center justify-between py-1 px-3 text-baseline text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm"
+                aria-expanded={isExpanded}
+                aria-controls={`submenu-${item.title.replace(/\s+/g, '-').toLowerCase()}`}
+              >
                 <div className="flex items-center space-x-2">
-                  <item.icon className="h-4 w-4" />
+                  <item.icon className="h-4 w-4" aria-hidden="true" />
                   <span>{item.title}</span>
                 </div>
                 <ChevronRight className={cn(
                   "h-3 w-3 transition-transform duration-300",
                   isExpanded && "rotate-90"
-                )} />
+                )} aria-hidden="true" />
               </CollapsibleTrigger>
-              <CollapsibleContent className="space-y-0.5 ml-6">
+              <CollapsibleContent 
+                className="space-y-0.5 ml-6"
+                id={`submenu-${item.title.replace(/\s+/g, '-').toLowerCase()}`}
+                role="group"
+                aria-labelledby={`header-${item.title.replace(/\s+/g, '-').toLowerCase()}`}
+              >
                 {item.items.map((subItem) => (
                   <Link
                     key={subItem.href}
                     href={subItem.href}
                     onClick={onItemClick}
                     className={cn(
-                      "block py-1 px-3 text-baseline transition-colors duration-300",
+                      "block py-1 px-3 text-baseline transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm",
                       isActive(subItem.href)
                         ? "text-black dark:text-white"
                         : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                     )}
+                    aria-current={isActive(subItem.href) ? "page" : undefined}
                   >
                     {subItem.title}
                   </Link>
@@ -213,13 +236,14 @@ function SidebarContent({ onItemClick }: SidebarContentProps) {
             href={item.href}
             onClick={onItemClick}
             className={cn(
-              "flex items-center space-x-2 py-1 px-3 text-baseline transition-colors duration-300",
+              "flex items-center space-x-2 py-1 px-3 text-baseline transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm",
               isItemActive
                 ? "text-black dark:text-white"
                 : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
             )}
+            aria-current={isItemActive ? "page" : undefined}
           >
-            <item.icon className="h-4 w-4" />
+            <item.icon className="h-4 w-4" aria-hidden="true" />
             <span>{item.title}</span>
           </Link>
         )
@@ -233,14 +257,22 @@ export function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <div className="flex flex-col flex-grow pt-5 bg-background border-r overflow-y-auto">
+        <div className="flex flex-col flex-grow pt-5 bg-background border-r overflow-hidden">
           <div className="flex items-center flex-shrink-0 px-4">
             <h1 className="text-baseline">PetPooja Analytics</h1>
           </div>
-          <div className="mt-5 flex-grow flex flex-col">
-            <nav className="flex-1 px-2 space-y-1">
-              <SidebarContent />
-            </nav>
+          <div className="mt-3 px-4">
+            <MenuSearch />
+          </div>
+          <div className="mt-3 px-4">
+            <Breadcrumb />
+          </div>
+          <div className="mt-5 flex-grow flex flex-col overflow-hidden">
+            <ScrollArea className="flex-1 px-2 space-y-1">
+              <nav className="space-y-1">
+                <SidebarContent />
+              </nav>
+            </ScrollArea>
           </div>
         </div>
       </div>
@@ -259,14 +291,25 @@ export function Sidebar() {
               <div className="flex items-center flex-shrink-0 px-4 py-5">
                 <h1 className="text-baseline">PetPooja Analytics</h1>
               </div>
-              <div className="flex-grow overflow-y-auto">
-                <nav className="px-2 space-y-1">
-                  <SidebarContent onItemClick={() => {
-                    // Close the sheet when an item is clicked
-                    const closeButton = document.querySelector('[data-state="open"] button[aria-label="Close"]') as HTMLButtonElement
-                    closeButton?.click()
-                  }} />
-                </nav>
+              <div className="mt-3 px-4">
+                <MenuSearch onItemSelect={() => {
+                  const closeButton = document.querySelector('[data-state="open"] button[aria-label="Close"]') as HTMLButtonElement
+                  closeButton?.click()
+                }} />
+              </div>
+              <div className="mt-3 px-4">
+                <Breadcrumb />
+              </div>
+              <div className="flex-grow overflow-hidden mt-5">
+                <ScrollArea className="h-full px-2">
+                  <nav className="space-y-1">
+                    <SidebarContent onItemClick={() => {
+                      // Close the sheet when an item is clicked
+                      const closeButton = document.querySelector('[data-state="open"] button[aria-label="Close"]') as HTMLButtonElement
+                      closeButton?.click()
+                    }} />
+                  </nav>
+                </ScrollArea>
               </div>
             </div>
           </SheetContent>
