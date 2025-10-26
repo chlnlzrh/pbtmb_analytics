@@ -108,7 +108,7 @@ export function NestedMenu({
           return (
             <Link
               key={itemKey}
-              href={item.href}
+              href={item.href as any}
               onClick={onItemClick}
               className={cn(
                 "flex items-center space-x-2 py-1 px-3 text-baseline transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm",

@@ -118,7 +118,7 @@ export function Breadcrumb({ className }: BreadcrumbProps) {
               </span>
             ) : (
               <Link
-                href={item.href}
+                href={item.href as any}
                 className="text-baseline text-muted-foreground hover:text-foreground transition-colors duration-200"
               >
                 {index === 0 && item.href === "/" ? (

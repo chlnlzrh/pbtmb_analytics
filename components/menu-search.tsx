@@ -138,7 +138,7 @@ export function MenuSearch({ onItemSelect }: MenuSearchProps) {
                     value={`${item.title} ${item.keywords?.join(" ") || ""}`}
                     onSelect={() => {
                       runCommand(() => {
-                        router.push(item.href)
+                        router.push(item.href as any)
                         onItemSelect?.(item.href)
                       })
                     }}
